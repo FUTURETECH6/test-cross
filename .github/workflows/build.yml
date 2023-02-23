@@ -3,10 +3,10 @@ name: Rust
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'Cargo.toml'
-      - 'Cargo.lock'
-      - 'src'
+    # paths:
+    #   - 'Cargo.toml'
+    #   - 'Cargo.lock'
+    #   - 'src'
   pull_request:
     branches: [ "master" ]
 
@@ -20,12 +20,12 @@ jobs:
     strategy:
       matrix:
         target:
-          - aarch64-apple-darwin
-          - aarch64-unknown-linux-musl
-          - aarch64-pc-windows-msvc
-          - x86_64-apple-darwin
+          # - aarch64-apple-darwin
+          # - aarch64-unknown-linux-musl
+          # - aarch64-pc-windows-msvc
+          # - x86_64-apple-darwin
           - x86_64-unknown-linux-musl
-          - x86_64-pc-windows-msvc
+          - x86_64-pc-windows-gnu
       fail-fast: false
 
     steps:
@@ -50,7 +50,7 @@ jobs:
         run: |
           mkdir archive
           cd archive
-          if [ "${{ matrix.target }}" == "*-pc-windows-msvc" ]; then
+          if [ "${{ matrix.target }}" == "*-pc-windows-*" ]; then
             cp "../target/${{ matrix.target }}/release/test-cross.exe" ./
             7z a "rustle-bird-${{ matrix.target }}.7z" test-cross.exe
           else
