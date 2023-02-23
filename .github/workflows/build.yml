@@ -50,16 +50,16 @@ jobs:
         run: |
           mkdir archive
           cd archive
-          if [ "${{ matrix.target }}" == "*-pc-windows-*" ]; then
-            cp "../target/${{ matrix.target }}/release/test-cross.exe" ./
-            7z a "rustle-bird-${{ matrix.target }}.7z" test-cross.exe
+          if [ ${{ matrix.target }} == *-pc-windows-* ]; then
+            cp "../target/${{ matrix.target }}/release/${GITHUB_REPOSITORY#*/}.exe" ./
+            7z a "${GITHUB_REPOSITORY#*/}-${{ matrix.target }}.7z" ${GITHUB_REPOSITORY#*/}.exe
           else
-            cp "../target/${{ matrix.target }}/release/test-cross" ./
-            tar -czf "rustle-bird-${{ matrix.target }}.tar.gz" test-cross
+            cp "../target/${{ matrix.target }}/release/${GITHUB_REPOSITORY#*/}*" ./
+            tar -czf "${GITHUB_REPOSITORY#*/}-${{ matrix.target }}.tar.gz" ${GITHUB_REPOSITORY#*/}
           fi
 
       - name: Upload archive
         uses: actions/upload-artifact@v1
         with:
-          name: rustle-bird-${{ matrix.target }}
-          path: archive/${{ matrix.archive-name }}.*
+          name: ${GITHUB_REPOSITORY#*/}-${{ matrix.target }}
+          path: archive/${GITHUB_REPOSITORY#*/}-${{ matrix.target }}.*
